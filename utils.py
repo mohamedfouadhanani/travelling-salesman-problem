@@ -5,9 +5,6 @@ import os
 import imageio
 import shutil
 
-Genome = List[int]
-Population = List[Genome]
-
 
 def get_dataset(distances_file_path: str, optimum_file_path: str,
                 xy_file_path: str):
@@ -32,11 +29,11 @@ def get_dataset(distances_file_path: str, optimum_file_path: str,
         file_content_lines = file.readlines()
         for file_content_line in file_content_lines:
             file_content_line = file_content_line.replace("\n", "")
-            file_content_line_list: List[str] = file_content_line.split(" ")
-            file_content_line_list_values: List[int] = [
+            file_content_line_list = file_content_line.split(" ")
+            xy_row: List[float] = [
                 float(value) for value in file_content_line_list]
 
-            xy.append(file_content_line_list_values)
+            xy.append(xy_row)
 
     return distances, optimum, xy
 

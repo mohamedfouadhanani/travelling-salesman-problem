@@ -1,16 +1,14 @@
-from typing import List, Tuple
-
-Solution = Tuple[List[int], float]
+from typing import Optional
+from datatypes import Genome, History, Matrix, Parents, Population, Solution
 
 
 class GeneticAlgorithm:
     def __init__(
-            self, distances: List[List[int]],
-            optimum: List[int],
-            selection_function, crossover_function, mutation_function,
-            fitness_function, generation_function) -> None:
-        self.distances = distances
-        self.optimum = optimum
+            self, distances: Matrix[int],
+            optimum: Genome, selection_function, crossover_function,
+            mutation_function, fitness_function, generation_function) -> None:
+        self.distances: Matrix[int] = distances
+        self.optimum: Genome = optimum
         self.selection_function = selection_function
         self.crossover_function = crossover_function
         self.mutation_function = mutation_function
@@ -21,10 +19,14 @@ class GeneticAlgorithm:
             self, number_generations: int, population_size: int,
             crossover_rate: float, mutation_rate: float, number_parents: int,
             number_mutations: int, minimum_fitness: int, verbose: bool):
-        history = {"best_fitness": [], "mean_fitness": [], "best_solution": []}
+        history: History = {
+            "best_fitness": [],
+            "mean_fitness": [],
+            "best_solution": []}
 
         genome_size: int = len(self.distances)
-        population: int = self.generation_function(population_size, genome_size)
+        population: Population = self.generation_function(
+            population_size, genome_size)
 
         for generation in range(number_generations):
             population = sorted(
@@ -50,16 +52,16 @@ class GeneticAlgorithm:
                     self.distances) <= minimum_fitness:
                 break
 
-            parents = self.selection_function(
+            parents: Parents = self.selection_function(
                 population, number_parents, self.fitness_function, self.distances)
 
-            offsprings = []
+            offsprings: Population = []
 
             for parent_1, parent_2 in parents:
-                offspring_1 = self.crossover_function(
+                offspring_1: Genome = self.crossover_function(
                     parent_1, parent_2, crossover_rate)
 
-                offspring_2 = self.crossover_function(
+                offspring_2: Genome = self.crossover_function(
                     parent_1, parent_2, crossover_rate)
 
                 if offspring_1 is not None:
@@ -78,7 +80,9 @@ class GeneticAlgorithm:
                                 key=lambda genome: self.fitness_function(
                                     genome, self.distances))[:population_size]
 
-        solution = population[0]
-        profit = self.fitness_function(solution, self.distances)
+        solution_genome: Genome = population[0]
+        profit: int = self.fitness_function(solution_genome, self.distances)
 
-        return solution, profit, history
+        solution: Solution = solution_genome, profit, history
+
+        return solution

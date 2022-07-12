@@ -5,19 +5,19 @@ import random
 import time
 import calendar
 import utils
-from utils import Genome, Population
+from datatypes import Genome, Population, Matrix, Parents
 
 
 def generate_population(population_size: int, genome_size: int) -> Population:
     values_list: List[int] = list(range(1, genome_size + 1))
 
-    generation = [random.sample(values_list, genome_size)
-                  for _ in range(population_size)]
+    generation: Population = [random.sample(values_list, genome_size)
+                              for _ in range(population_size)]
 
     return generation
 
 
-def fitness(genome: Genome, distances) -> int:
+def fitness(genome: Genome, distances: Matrix[int]) -> int:
     distance_summation: int = 0
 
     starting_location: int = genome[0]
@@ -35,7 +35,7 @@ def fitness(genome: Genome, distances) -> int:
 
 
 def select_parents(population: Population, number_parents: int,
-                   fitness_function, distances) -> List[Tuple[Genome, Genome]]:
+                   fitness_function, distances: Matrix[int]) -> Parents:
     population = sorted(population, key=lambda genome: fitness_function(
         genome, distances))
 
@@ -69,10 +69,11 @@ def single_point_crossover(parent_1: Genome, parent_2: Genome,
     starting_index = min(crossover_index_1, crossover_index_2)
     finishing_index = max(crossover_index_1, crossover_index_2)
 
-    partial_offspring = parent_1[starting_index:finishing_index]
-    remaining = [gene for gene in parent_2 if gene not in partial_offspring]
+    partial_offspring: Genome = parent_1[starting_index:finishing_index]
+    remaining: Genome = [gene for gene in parent_2
+                         if gene not in partial_offspring]
 
-    offspring = partial_offspring + remaining
+    offspring: Genome = partial_offspring + remaining
 
     return offspring
 
@@ -93,9 +94,9 @@ def mutate(genome: Genome, number_mutations: int, mutation_rate: float) -> Genom
 
 
 def main():
-    distances_file_path = path.join("dataset", "distances.txt")
-    optimum_file_path = path.join("dataset", "optimum.txt")
-    xy_file_path = path.join("dataset", "xy.txt")
+    distances_file_path: str = path.join("dataset", "distances.txt")
+    optimum_file_path: str = path.join("dataset", "optimum.txt")
+    xy_file_path: str = path.join("dataset", "xy.txt")
 
     distances, optimum, xy = utils.get_dataset(
         distances_file_path, optimum_file_path, xy_file_path)
@@ -109,7 +110,7 @@ def main():
     verbose: bool = True
     minimum_fitness: int = fitness(optimum[:-1], distances)
 
-    solver = GeneticAlgorithm(
+    solver: GeneticAlgorithm = GeneticAlgorithm(
         distances, optimum, selection_function=select_parents,
         crossover_function=single_point_crossover, mutation_function=mutate,
         fitness_function=fitness,
