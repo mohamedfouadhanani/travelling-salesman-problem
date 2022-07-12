@@ -1,2 +1,3 @@
-./gifs
-./__pycache__
+gifs/*
+
+__pycache__/*

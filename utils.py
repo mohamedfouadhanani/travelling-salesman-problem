@@ -41,7 +41,10 @@ def get_dataset(distances_file_path: str, optimum_file_path: str,
     return distances, optimum, xy
 
 
-def plot_best_mean_fitness(history):
+def plot_best_mean_fitness(history, output_directory: str):
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+
     X = list(range(len(history["best_fitness"])))
 
     plt.plot(X, history["best_fitness"], color="blue", label="Best fitness")
@@ -50,7 +53,9 @@ def plot_best_mean_fitness(history):
     plt.xlabel("Generations")
     plt.ylabel("Distance")
     plt.legend()
-    plt.show()
+    full_path = path.join(output_directory, "best_mean_fitness.png")
+    plt.savefig(full_path)
+    plt.clf()
 
 
 def plot_route(route: List[int], xy, output_directory: str):
@@ -73,6 +78,7 @@ def plot_route(route: List[int], xy, output_directory: str):
     plt.ylabel("y-coordinate")
     full_path = path.join(output_directory, "ideal_route.png")
     plt.savefig(full_path)
+    plt.clf()
 
 
 def create_best_route_gif(best_routes, xy, directory_path: str):

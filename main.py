@@ -20,10 +20,6 @@ def generate_population(population_size: int, genome_size: int) -> Population:
 def fitness(genome: Genome, distances) -> int:
     distance_summation: int = 0
 
-    # genome_length = len(genome)
-    # genome_set_length = len(set(genome))
-
-    # if genome_length == genome_set_length:
     starting_location: int = genome[0]
     current_location: int = starting_location
 
@@ -96,7 +92,14 @@ def mutate(genome: Genome, number_mutations: int, mutation_rate: float) -> Genom
     return genome
 
 
-def run_ga_instance(distances, optimum):
+def main():
+    distances_file_path = path.join("dataset", "distances.txt")
+    optimum_file_path = path.join("dataset", "optimum.txt")
+    xy_file_path = path.join("dataset", "xy.txt")
+
+    distances, optimum, xy = utils.get_dataset(
+        distances_file_path, optimum_file_path, xy_file_path)
+
     number_generations: int = 300
     population_size: int = 500
     crossover_rate: float = 0.3
@@ -112,35 +115,15 @@ def run_ga_instance(distances, optimum):
         fitness_function=fitness,
         generation_function=generate_population)
 
-    solution, solution_fitness, history = solver(
+    solution, _, history = solver(
         number_generations, population_size, crossover_rate, mutation_rate,
         number_parents, number_mutations, minimum_fitness, verbose)
-
-    return solution, solution_fitness, history
-
-
-def main():
-    distances_file_path = path.join("dataset", "distances.txt")
-    optimum_file_path = path.join("dataset", "optimum.txt")
-    xy_file_path = path.join("dataset", "xy.txt")
-
-    distances, optimum, xy = utils.get_dataset(
-        distances_file_path, optimum_file_path, xy_file_path)
-
-    solution, solution_fitness, history = run_ga_instance(
-        distances, optimum)
-
-    print(
-        f"optimal solution is {optimum} with distance {fitness(optimum[:-1], distances)}")
-    print(
-        f"solution is {solution} with fitness {solution_fitness} and distance {fitness(solution, distances)}")
-
-    # utils.plot_best_mean_fitness(history)
 
     gmt = time.gmtime()
     timestamp = calendar.timegm(gmt)
     gif_directory: str = path.join("gifs", f"{timestamp}")
 
+    utils.plot_best_mean_fitness(history, gif_directory)
     utils.plot_route(solution, xy, gif_directory)
     utils.create_best_route_gif(history["best_solution"], xy, gif_directory)
 
