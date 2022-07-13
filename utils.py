@@ -55,7 +55,7 @@ def plot_best_mean_fitness(history, output_directory: str):
     plt.clf()
 
 
-def plot_route(route: List[int], xy, output_directory: str):
+def plot_route(route: List[int], xy, output_directory: str, title: str):
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
 
@@ -70,7 +70,7 @@ def plot_route(route: List[int], xy, output_directory: str):
 
     plt.plot(X, Y, color="red")
     plt.scatter(X, Y, color="red")
-    plt.title("Best route found throughout the generations")
+    plt.title(title)
     plt.xlabel("x-coordinate")
     plt.ylabel("y-coordinate")
     full_path = path.join(output_directory, "ideal_route.png")
