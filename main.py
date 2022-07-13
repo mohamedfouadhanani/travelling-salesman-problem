@@ -58,25 +58,10 @@ def main():
     distances, optimum, xy = utils.get_dataset(
         distances_file_path, optimum_file_path, xy_file_path)
 
-    # solution, _, history = running_ga_instance(distances, optimum)
+    # solution, profit, history = running_ga_instance(distances, optimum)
     solution, profit = running_greedy_instance(distances)
 
-    gmt = time.gmtime()
-    timestamp = calendar.timegm(gmt)
-
-    gif_directory: str = path.join("gifs", f"{timestamp}")
-
-    # utils.plot_best_mean_fitness(history, gif_directory)
-
-    # title: str = "Best Route Found Throughout the Generations"
-    title: str = "Greedy Route"
-    utils.plot_route(solution, xy, gif_directory, title)
-
-    # utils.create_best_route_gif(history["best_solution"], xy, gif_directory)
-
-    # input_directory: str = path.join(gif_directory, "images")
-    # output_directory: str = path.join(gif_directory, "animation.gif")
-    # utils.create_gif(output_directory, input_directory)
+    print(f"solution is {solution} with profit {profit}")
 
 
 if __name__ == "__main__":
