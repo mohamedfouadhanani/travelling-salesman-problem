@@ -4,7 +4,7 @@ import calendar
 
 # TYPING
 from typing import List
-from datatypes import Matrix, Solution
+from datatypes import Matrix, GeneticSolution, GreedySolution
 
 # THIRD PARTY
 import utils
@@ -13,8 +13,13 @@ import utils
 from genetic_algorithm.genetic_algorithm import GeneticAlgorithm
 from genetic_algorithm.functions import *
 
+# GREEDY ALGORITHM
+from greedy.greedy import Greedy
 
-def running_ga_instance(distances: Matrix[int], optimum: List[int]) -> Solution:
+
+def running_ga_instance(
+        distances: Matrix[int],
+        optimum: List[int]) -> GeneticSolution:
     number_generations: int = 300
     population_size: int = 500
     crossover_rate: float = 0.3
@@ -37,6 +42,14 @@ def running_ga_instance(distances: Matrix[int], optimum: List[int]) -> Solution:
     return solution, profit, history
 
 
+def running_greedy_instance(distances: Matrix[int]) -> GreedySolution:
+    greedy = Greedy(distances)
+
+    solution, profit = greedy()
+
+    return solution, profit
+
+
 def main():
     distances_file_path: str = path.join("dataset", "distances.txt")
     optimum_file_path: str = path.join("dataset", "optimum.txt")
@@ -45,20 +58,22 @@ def main():
     distances, optimum, xy = utils.get_dataset(
         distances_file_path, optimum_file_path, xy_file_path)
 
-    solution, _, history = running_ga_instance(distances, optimum)
+    # solution, _, history = running_ga_instance(distances, optimum)
+    # solution, profit = running_greedy_instance(distances)
 
-    gmt = time.gmtime()
-    timestamp = calendar.timegm(gmt)
-    gif_directory: str = path.join("gifs", f"{timestamp}")
+    # gmt = time.gmtime()
+    # timestamp = calendar.timegm(gmt)
 
-    utils.plot_best_mean_fitness(history, gif_directory)
-    utils.plot_route(solution, xy, gif_directory)
-    utils.create_best_route_gif(history["best_solution"], xy, gif_directory)
+    # gif_directory: str = path.join("gifs", f"{timestamp}")
 
-    input_directory: str = path.join(gif_directory, "images")
-    output_directory: str = path.join(gif_directory, "animation.gif")
+    # utils.plot_best_mean_fitness(history, gif_directory)
+    # utils.plot_route(solution, xy, gif_directory)
+    # utils.create_best_route_gif(history["best_solution"], xy, gif_directory)
 
-    utils.create_gif(output_directory, input_directory)
+    # input_directory: str = path.join(gif_directory, "images")
+    # output_directory: str = path.join(gif_directory, "animation.gif")
+
+    # utils.create_gif(output_directory, input_directory)
 
 
 if __name__ == "__main__":

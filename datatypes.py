@@ -8,6 +8,7 @@ Parents = List[Tuple[Genome, Genome]]
 T = TypeVar("T")
 Matrix = List[List[T]]
 
-Solution = Tuple[Genome, int, Dict[str, List[Any]]]
+GeneticSolution = Tuple[Genome, int, Dict[str, List[Any]]]
+GreedySolution = Tuple[List[int], int]
 
 History = Dict[str, List[Any]]

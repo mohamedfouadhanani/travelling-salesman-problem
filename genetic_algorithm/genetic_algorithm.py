@@ -1,5 +1,5 @@
 from typing import Optional
-from datatypes import Genome, History, Matrix, Parents, Population, Solution
+from datatypes import Genome, History, Matrix, Parents, Population, GeneticSolution
 
 
 class GeneticAlgorithm:
@@ -18,7 +18,7 @@ class GeneticAlgorithm:
     def __call__(
             self, number_generations: int, population_size: int,
             crossover_rate: float, mutation_rate: float, number_parents: int,
-            number_mutations: int, minimum_fitness: int, verbose: bool):
+            number_mutations: int, minimum_fitness: int, verbose: bool) -> GeneticSolution:
         history: History = {
             "best_fitness": [],
             "mean_fitness": [],
@@ -83,6 +83,6 @@ class GeneticAlgorithm:
         solution_genome: Genome = population[0]
         profit: int = self.fitness_function(solution_genome, self.distances)
 
-        solution: Solution = solution_genome, profit, history
+        solution: GeneticSolution = solution_genome, profit, history
 
         return solution
