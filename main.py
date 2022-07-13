@@ -1,13 +1,8 @@
 from os import path
-import time
-import calendar
 
 # TYPING
 from typing import List
 from datatypes import Matrix, GeneticSolution, GreedySolution
-
-# THIRD PARTY
-import utils
 
 # GENETIC ALGORITHM
 from genetic_algorithm.genetic_algorithm import GeneticAlgorithm
@@ -15,6 +10,9 @@ from genetic_algorithm.functions import *
 
 # GREEDY ALGORITHM
 from greedy.greedy import Greedy
+
+# UTILS
+import utils
 
 
 def running_ga_instance(
